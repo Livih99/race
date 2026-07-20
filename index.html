@@ -721,7 +721,7 @@ function freshState(){
     name:playerName, t:0, running:false, finished:false, dnf:false,
     compound:'M', wear:0, body:100, pts:0,
     freezeUntil:0, slowUntil:0, slowFactor:1, boostUntil:0,
-    inPit:false, pitArmed:false, crawl:false,
+    inPit:false, pitArmed:false, mustBox:false, crawl:false,
     shield:false, nextPitDiscount:0,
     pendingPuncture:false, scUntil:0,
     rain:false, rainHeavy:false, weather:'DRY', weatherPlan:[], rainWarned:false, rainCalled:false,
@@ -1036,9 +1036,9 @@ function tutorialTick(me){
     if(me.dist>=1.1)S.tut='ot';
   }
   if(S.tut==='ot'&&me.dist>=1.25&&!otActive&&!S.inPit){
-    /* nudge the nearest rival into striking range for the teaching pass */
-    let tgt=null,bd=99;
-    S.cars.forEach(c=>{if(!c.isMe&&S.t>=c.stopUntil){const d=Math.abs(c.dist-me.dist);if(d<bd){bd=d;tgt=c;}}});
+    /* nudge a random rival into striking range for the teaching pass */
+    const elig=S.cars.filter(c=>!c.isMe&&S.t>=c.stopUntil);
+    const tgt=elig.length?elig[Math.floor(Math.random()*elig.length)]:null;
     if(tgt){tgt.dist=me.dist+0.035;openOvertake(tgt,true);}
     S.tut='pitwait';
   }
@@ -1189,6 +1189,7 @@ function setFlag(txt,cls){const el=$('trackStatus');const ic=cls==='red'?'🔴 '
 /* ============ pit button ============ */
 function togglePit(){
   if(!S||!S.running||racePaused||S.inPit||S.crawl)return;
+  if(S.pitArmed&&S.mustBox){toast('💨 Puncture. You have to box.','bad');return;}
   S.pitArmed=!S.pitArmed;syncPitBtn();
   if(S.pitArmed){sfxGood();coachHide();$('pitBtn').classList.remove('callme');}
 }
@@ -1198,7 +1199,7 @@ function syncPitBtn(){
   if(!S.crawl)b.classList.remove('urgent');
   if(S.pitArmed)b.classList.remove('callme');
   b.childNodes[0].nodeValue=S.pitArmed?'Boxing this lap ✅ ':'Box box box 🔧 ';
-  $('pitHint').textContent=S.crawl?'Limping to the pit lane…':S.pitArmed?'Tap to stay out':'Pit at the end of this lap';
+  $('pitHint').textContent=S.crawl?'Limping to the pit lane…':S.pitArmed?(S.mustBox?'Puncture: boxing is compulsory':'Tap to stay out'):'Pit at the end of this lap';
 }
 
 /* ============ INCIDENTS (one system, always pauses, one timeout rule) ============ */
@@ -1266,8 +1267,8 @@ const INCIDENTS=[
   {id:'punct',icon:'💨',title:'TYRE PUNCTURE',sev:'m',
    onOpen:st=>{st.wear=Math.min(100,st.wear+12);},
    choices:[
-    {l:'CRAWL & BOX',sub:'guaranteed home',safe:true,run:st=>{st.pitArmed=true;syncPitBtn();return{t:'Nursing it home. Box this lap.',say:'Nursing a failing part home for a proper repair. Better than running it to destruction.',good:true,pts:10,slow:[5,1.5]};}},
-    {l:'PUSH ON 😤',risk:2,run:st=>Math.random()<0.3+0.3*riskGrip()?({t:'Hustled back on three good tyres. 💪',pts:15,slow:[3,1.25]}):({t:'The flat shreds the bodywork!',bad:true,body:-18,wear:8,shake:true,slow:[4,1.4]})},
+    {l:'CRAWL & BOX',sub:'guaranteed home',safe:true,run:st=>{st.pitArmed=true;st.mustBox=true;syncPitBtn();return{t:'Nursing it home. Box this lap.',say:'Nursing a failing part home for a proper repair. Better than running it to destruction.',good:true,pts:10,slow:[5,1.5]};}},
+    {l:'PUSH ON 😤',sub:'still boxing',risk:2,run:st=>{st.pitArmed=true;st.mustBox=true;syncPitBtn();return Math.random()<0.3+0.3*riskGrip()?({t:'Hustled it back on three good tyres. Boxing. 💪',pts:15,slow:[3,1.25]}):({t:'The flat shreds the bodywork on the way in!',bad:true,body:-18,wear:8,shake:true,slow:[4,1.4]});}},
    ]},
   {id:'raincall',icon:'🌧️',title:'RAIN. TYRE CALL?',sev:'m',
    choices:[
@@ -1476,7 +1477,7 @@ const PIT_WORK_T=2.4;      /* the crew do the stop themselves */
 const PIT_WHEELS=[[-5.5,-4.6],[-5.5,4.6],[4.2,-4.2],[4.2,4.2]];
 
 function enterPit(underSC){
-  S.inPit=true;S.pitArmed=false;
+  S.inPit=true;S.pitArmed=false;S.mustBox=false;
   pitEmergency=S.crawl;S.crawl=false;
   pitWasSC=!!underSC||S.t<S.scUntil;
   pitLifeAtEntry=100-S.wear;
