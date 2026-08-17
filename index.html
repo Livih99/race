@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
-<title>PIT WALL - Reliability Grand Prix</title>
+<title>PIT WALL - Reliability GP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,600;0,700;0,900;1,700;1,900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -11,7 +11,7 @@
 :root{
   --carbon:#0D1015; --panel:#151A22; --panel-2:#1B2230; --panel-3:#222B3B; --line:#2A3547;
   --ink:#EDF1F6; --ink-dim:#7E8B9E; --ink-mid:#A9B6C7;
-  --purple:#B14BF4; --purple-lt:#C468FF;
+  --teal:#119B95; --teal-lt:#19CFC6;
   --amber:#FFB020; --red:#FF3B4A; --green:#2ED573; --blue:#57C7FF; --cyan:#38E0D6;
   --u:1px;
 }
@@ -39,24 +39,24 @@ body{
 button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px solid var(--line);
   border-radius:12px;cursor:pointer;font-weight:900;overflow:hidden;position:relative}
 .btn-primary{
-  background:linear-gradient(180deg,var(--purple-lt) 0%,var(--purple) 100%);border:none;color:#180024;
+  background:linear-gradient(180deg,var(--teal-lt) 0%,var(--teal) 100%);border:none;color:#002523;
   font-size:22px;letter-spacing:.12em;text-transform:uppercase;padding:20px;border-radius:14px;
-  box-shadow:0 8px 28px rgba(177,75,244,.4);font-style:italic;width:100%}
+  box-shadow:0 8px 28px rgba(25,207,198,.4);font-style:italic;width:100%}
 .btn-primary:active{transform:translateY(2px)}
 
 /* ================= START ================= */
 #start{justify-content:center;align-items:center;text-align:center;gap:0;
-  background:radial-gradient(120% 55% at 50% 8%, rgba(177,75,244,.20), transparent 62%), var(--carbon)}
+  background:radial-gradient(120% 55% at 50% 8%, rgba(17,155,149,.20), transparent 62%), var(--carbon)}
 #start .kick{font-size:12px;letter-spacing:.42em;text-transform:uppercase;color:var(--ink-dim);font-weight:700}
 #start h1{font-size:clamp(46px,15vw,80px);font-weight:900;font-style:italic;line-height:.88;letter-spacing:-.01em;margin:10px 0 2px}
-#start h1 em{color:var(--purple);font-style:italic}
+#start h1 em{color:var(--teal);font-style:italic}
 #start .sub2{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-mid);font-weight:700;margin-top:8px}
 .cheq{height:12px;width:150px;margin:20px auto 0;border-radius:2px;transform:skewX(-18deg);
   background:conic-gradient(#EDF1F6 0 25%,#0D1015 0 50%,#EDF1F6 0 75%,#0D1015 0) 0 0/12px 12px}
 #startSvgWrap{width:100%;flex:1;min-height:0;max-height:34vh;margin:18px 0 6px;display:flex;align-items:center;justify-content:center;opacity:.9}
 #startSvgWrap svg{height:100%;width:auto;max-width:100%}
 #start .bestline{font-size:14px;color:var(--ink-dim);font-weight:700;margin:16px 0 14px;min-height:20px}
-#start .bestline b{color:var(--purple)}
+#start .bestline b{color:var(--teal)}
 #startBottom{width:100%;max-width:420px}
 
 /* ================= RACE ================= */
@@ -71,7 +71,7 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
   .gauge .g-fix{font-size:11px;padding:3px 5px;letter-spacing:.02em}
   .gauge .g-val{font-size:18px}
   #tutBadge{padding:4px 8px}
-  #maintBar{height:22px}
+  #maintBar{height:21px}
   #speedRow{height:22px}
   #radio{height:36px;font-size:13px}
   .panel{grid-auto-rows:minmax(42px,6.6vh) !important}
@@ -84,7 +84,7 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
 .hud .cell .lb{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim);font-weight:700;line-height:1}
 .hud .cell .vl{font-size:26px;font-weight:900;font-style:italic;line-height:1.02}
 #cPos{min-width:76px}
-#posVal{color:var(--purple)}
+#posVal{color:var(--teal)}
 #posVal small{font-size:12px;color:var(--ink-dim);font-style:normal}
 #cScore{flex:1;text-align:right;align-items:flex-end}
 #scoreVal{color:var(--green);font-size:32px}
@@ -100,11 +100,28 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
 @keyframes popup{0%{opacity:0;transform:translateY(6px)}12%{opacity:1;transform:translateY(0)}70%{opacity:1}100%{opacity:0;transform:translateY(-22px)}}
 
 #timebar{height:5px;background:var(--panel-2);border-radius:3px;overflow:hidden;flex-shrink:0}
-#timebar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--purple),var(--purple-lt));border-radius:3px}
+#timebar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--teal-lt));border-radius:3px}
 
-/* ---- fault risk readout: lives on the right of the update strip ---- */
-#riskChip{position:relative;z-index:1;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;
-  color:var(--ink-dim);border-left:1px solid var(--line);padding-left:9px;white-space:nowrap;letter-spacing:.02em}
+/* ---- green streak multiplier ---- */
+#streak{flex-shrink:0;display:flex;align-items:center;gap:8px;background:var(--panel);
+  border:1px solid var(--line);border-radius:9px;padding:5px 9px;transition:border-color .2s,background .2s}
+#streak .sk-lab{font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;
+  color:var(--ink-dim);white-space:nowrap}
+#streak .sk-bar{flex:1;height:7px;background:#0B0E13;border-radius:4px;overflow:hidden;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+#streak .sk-bar i{display:block;height:100%;width:0%;border-radius:4px;background:var(--green);
+  transition:width .1s linear,background .25s}
+#streak .sk-mult{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:900;font-style:italic;
+  color:var(--green);min-width:52px;text-align:right;font-variant-numeric:tabular-nums;line-height:1}
+#streak.hot{border-color:rgba(17,155,149,.6);background:rgba(17,155,149,.10)}
+#streak.hot .sk-bar i{background:var(--teal-lt)} #streak.hot .sk-mult{color:var(--teal-lt)}
+#streak.cold .sk-bar i{background:var(--red)} #streak.cold .sk-mult{color:var(--red)}
+#streak.brk{animation:skbrk .5s ease-out}
+@keyframes skbrk{0%{transform:translateX(0)}20%{transform:translateX(-6px)}
+  40%{transform:translateX(5px)}60%{transform:translateX(-3px)}100%{transform:translateX(0)}}
+#streak .sk-mult.pop{animation:bmp .3s ease-out}
+#riskChip{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--ink-dim);
+  border-left:1px solid var(--line);padding-left:9px;white-space:nowrap;letter-spacing:.02em}
 #riskChip b{color:var(--ink-mid);font-weight:900}
 #riskChip.warn b{color:var(--amber)} #riskChip.bad b{color:var(--red)}
 #riskChip.calm b{color:var(--cyan)}
@@ -163,7 +180,7 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
   color:var(--ink);line-height:1.1;font-variant-numeric:tabular-nums}
 #pitOverlay .po-sub{font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;color:var(--ink-dim)}
 #pitOverlay .po-note{display:none;margin-top:7px;max-width:300px;font-size:11.5px;line-height:1.3;font-weight:800;
-  letter-spacing:.04em;text-transform:uppercase;color:#180024;background:linear-gradient(180deg,var(--purple-lt),var(--purple));
+  letter-spacing:.04em;text-transform:uppercase;color:#002523;background:linear-gradient(180deg,var(--teal-lt),var(--teal));
   padding:6px 10px;border-radius:9px;box-shadow:0 8px 20px rgba(0,0,0,.55)}
 /* parked car: dimmed and frozen, no bobbing, no crawling */
 .parked{opacity:.42;transition:opacity .2s}
@@ -186,8 +203,8 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
 #speedRow .sp-wear b{color:var(--ink-mid);font-weight:900}
 #speedRow.slow .sp-bar i{background:var(--amber)} #speedRow.slow .sp-val{color:var(--amber)}
 #speedRow.bad .sp-bar i{background:var(--red)} #speedRow.bad .sp-val{color:var(--red)}
-#speedRow.push{border-color:rgba(177,75,244,.6);background:rgba(177,75,244,.10)}
-#speedRow.push .sp-bar i{background:var(--purple-lt)} #speedRow.push .sp-val{color:var(--purple-lt)}
+#speedRow.push{border-color:rgba(17,155,149,.6);background:rgba(17,155,149,.10)}
+#speedRow.push .sp-bar i{background:var(--teal-lt)} #speedRow.push .sp-val{color:var(--teal-lt)}
 #speedRow.stop{border-color:rgba(255,176,32,.6);background:rgba(255,176,32,.09)}
 #speedRow.stop .sp-bar i{background:var(--amber)} #speedRow.stop .sp-val{color:var(--amber)}
 #speedRow.calm .sp-wear b{color:var(--cyan)}
@@ -209,12 +226,12 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
 /* ticks mark the health left when each state trips: amber at 40% life, red at 18% life */
 .g-bar .tick.t1{bottom:40%} .g-bar .tick.t2{bottom:18%;background:rgba(255,59,74,.4)}
 .gauge .g-fix{font-size:clamp(11px,3.1vw,14px);letter-spacing:.06em;text-transform:uppercase;font-weight:800;line-height:1.05;
-  color:var(--ink-mid);white-space:nowrap;opacity:1;background:rgba(177,75,244,.12);
-  border:1px solid rgba(177,75,244,.34);border-radius:7px;padding:4px 7px;text-align:center}
-.gauge .g-fix b{color:var(--purple-lt);font-weight:900;font-size:1.06em}
-.gauge.st-a .g-fix,.gauge.st-r .g-fix{background:rgba(177,75,244,.24);border-color:var(--purple);color:var(--ink)}
+  color:var(--ink-mid);white-space:nowrap;opacity:1;background:rgba(17,155,149,.12);
+  border:1px solid rgba(17,155,149,.34);border-radius:7px;padding:4px 7px;text-align:center}
+.gauge .g-fix b{color:var(--teal-lt);font-weight:900;font-size:1.06em}
+.gauge.st-a .g-fix,.gauge.st-r .g-fix{background:rgba(17,155,149,.24);border-color:var(--teal);color:var(--ink)}
 .gauge.st-r .g-fix{animation:fixpul .8s infinite alternate}
-@keyframes fixpul{to{box-shadow:0 0 0 3px rgba(177,75,244,.28)}}
+@keyframes fixpul{to{box-shadow:0 0 0 3px rgba(25,207,198,.28)}}
 .gauge .g-val{font-size:22px;font-weight:900;font-style:italic;line-height:1;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
 .gauge.st-a .g-bar i{background:var(--amber)} .gauge.st-a .g-val{color:var(--amber)}
 .gauge.st-r .g-bar i{background:var(--red)}   .gauge.st-r .g-val{color:var(--red)}
@@ -232,7 +249,7 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
 #radio{flex-shrink:0;background:var(--panel);border:1px solid var(--line);border-radius:9px;
   padding:7px 10px;font-size:14px;font-weight:700;color:var(--ink-mid);line-height:1.2;
   height:42px;display:flex;align-items:center;gap:8px;overflow:hidden}
-#radio .dot{width:8px;height:8px;border-radius:50%;background:var(--purple);flex-shrink:0}
+#radio .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0}
 #radio b{color:var(--ink)}
 #radio.warn{border-color:rgba(255,59,74,.5)} #radio.warn .dot{background:var(--red)}
 
@@ -251,7 +268,7 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
 #bTyres{border-color:#5B4A2A} #bTyres .nm{color:#FFD98A;font-size:clamp(12px,3.2vw,16px);white-space:nowrap}
 #bInspect{border-color:#2F6B45} #bInspect .nm{color:var(--green)}
 #bPatch{border-color:#6B4520} #bPatch .nm{color:var(--amber)}
-#bPush{border-color:#5E2A80} #bPush .nm{color:var(--purple-lt)}
+#bPush{border-color:#14615C} #bPush .nm{color:var(--teal-lt)}
 #bPush{grid-column:span 3} #bPatch{grid-column:span 3}
 .pb.locked{opacity:.26;filter:grayscale(.7)}
 .pb.busy{opacity:1;filter:none;border-color:var(--ink);box-shadow:0 0 0 2px rgba(237,241,246,.25)}
@@ -259,26 +276,16 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
 .pb.hit{animation:hitfx .3s}
 @keyframes hitfx{0%{box-shadow:0 0 0 0 rgba(255,255,255,.75)}100%{box-shadow:0 0 0 14px rgba(255,255,255,0)}}
 .pb.spot{opacity:1;filter:none;animation:spotp .9s infinite}
-@keyframes spotp{0%,100%{box-shadow:0 0 0 0 rgba(177,75,244,.0);border-color:var(--purple)}
-  50%{box-shadow:0 0 22px 3px rgba(177,75,244,.55);border-color:var(--purple-lt)}}
+@keyframes spotp{0%,100%{box-shadow:0 0 0 0 rgba(17,155,149,.0);border-color:var(--teal)}
+  50%{box-shadow:0 0 22px 3px rgba(25,207,198,.55);border-color:var(--teal-lt)}}
 .panel.repairing{filter:saturate(.4)}
-#coach{position:absolute;z-index:40;display:none;background:linear-gradient(180deg,var(--purple-lt),var(--purple));
-  color:#180024;font-weight:900;font-size:13px;letter-spacing:.06em;text-transform:uppercase;
+#coach{position:absolute;z-index:40;display:none;background:linear-gradient(180deg,var(--teal-lt),var(--teal));
+  color:#002523;font-weight:900;font-size:13px;letter-spacing:.06em;text-transform:uppercase;
   padding:8px 12px;border-radius:10px;box-shadow:0 10px 26px rgba(0,0,0,.6);white-space:nowrap;pointer-events:none}
 #coach.show{display:block;animation:cp .22s ease-out}
 @keyframes cp{from{transform:scale(.82);opacity:0}to{transform:scale(1);opacity:1}}
 #coach:after{content:'';position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);
-  border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid var(--purple)}
-
-/* coach mark that points UP at the update strip, used once in the tutorial */
-#maintCoach{position:absolute;z-index:45;display:none;background:linear-gradient(180deg,#5ff0e6,var(--cyan));
-  color:#00201e;padding:8px 12px;border-radius:10px;box-shadow:0 10px 26px rgba(0,0,0,.6);
-  text-align:center;white-space:nowrap;pointer-events:none}
-#maintCoach .mc-t{font-weight:900;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
-#maintCoach .mc-s{font-weight:800;font-size:10.5px;letter-spacing:.02em;opacity:.75;margin-top:2px}
-#maintCoach.show{display:block;animation:cp .22s ease-out}
-#maintCoach:after{content:'';position:absolute;left:50%;top:-6px;transform:translateX(-50%);
-  border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:7px solid #5ff0e6}
+  border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid var(--teal)}
 
 /* ================= TUTORIAL CHROME ================= */
 /* start screen: secondary action under the main button */
@@ -321,13 +328,13 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
 #lmsg.big{color:var(--red)}
 
 /* ================= END ================= */
-#end{overflow-y:auto;gap:0;background:radial-gradient(120% 45% at 50% -5%, rgba(177,75,244,.16), transparent 60%), var(--carbon)}
+#end{overflow-y:auto;gap:0;background:radial-gradient(120% 45% at 50% -5%, rgba(17,155,149,.16), transparent 60%), var(--carbon)}
 #end .etop{text-align:center;padding-top:6px;flex-shrink:0}
 #end .elab{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--ink-dim);font-weight:700}
 #endScore{font-size:clamp(64px,22vw,110px);font-weight:900;font-style:italic;line-height:.92;color:var(--green)}
 #endBest{font-size:15px;font-weight:700;color:var(--ink-mid);margin-top:2px;min-height:22px}
-#endBest b{color:var(--purple)}
-#endBest.win{color:var(--purple)}
+#endBest b{color:var(--teal)}
+#endBest.win{color:var(--teal)}
 .brk{margin:12px 0 0;border-top:1px solid var(--line)}
 .brow{display:flex;justify-content:space-between;align-items:baseline;padding:7px 2px;border-bottom:1px solid rgba(42,53,71,.5);
   opacity:0;transform:translateY(6px);font-size:15px}
@@ -340,24 +347,27 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
 .brow.total{border-bottom:none;border-top:2px solid var(--line);margin-top:2px}
 .brow.total .k{color:var(--ink);font-weight:900;font-style:italic;font-size:18px}
 .brow.total .v{font-size:22px;color:var(--ink)}
-#debrief{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--purple);
+#debrief{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--teal);
   border-radius:10px;padding:12px 13px;font-size:15px;line-height:1.42;color:var(--ink-mid);opacity:0}
 #debrief.in{animation:rin .4s ease-out forwards}
 #debrief b{color:var(--ink)}
 .lbwrap{margin-top:14px}
 .lbwrap h3{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-dim);font-weight:700;margin-bottom:7px}
+.lbwrap h3 .lbnote{letter-spacing:.12em;color:var(--line);margin-left:6px}
+.lbclear{background:none;border:0;color:var(--ink-dim);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:700;padding:9px 2px 2px;margin-top:2px;opacity:.7}
 .nameRow{display:flex;gap:8px;margin-bottom:9px}
 #nameIn{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--ink);
   font-family:inherit;font-weight:900;font-style:italic;font-size:17px;padding:11px 12px;letter-spacing:.06em;text-transform:uppercase;outline:none}
-#nameIn:focus{border-color:var(--purple)}
+#nameIn:focus{border-color:var(--teal)}
 #saveBtn{padding:0 18px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;background:var(--panel-3)}
 #lbList{display:flex;flex-direction:column;gap:4px;max-height:150px;overflow-y:auto}
 .lbrow{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:15px}
 .lbrow .r{font-family:'JetBrains Mono',monospace;color:var(--ink-dim);font-weight:700;width:22px}
 .lbrow .n{flex:1;font-weight:900;font-style:italic;letter-spacing:.04em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lbrow .s{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green)}
-.lbrow.me{border-color:var(--purple);background:rgba(177,75,244,.1)}
-.lbrow.me .n{color:var(--purple-lt)}
+.lbrow.me{border-color:var(--teal);background:rgba(17,155,149,.1)}
+.lbrow.me .n{color:var(--teal-lt)}
 #endBottom{padding:16px 0 6px;flex-shrink:0}
 #endBottom .btn-ghost{width:100%;margin-top:10px;background:transparent;border:1px solid var(--line);
   color:var(--ink-mid);font-size:13px;letter-spacing:.16em;text-transform:uppercase;padding:13px;border-radius:12px;font-weight:800}
@@ -367,9 +377,9 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
 #endPos{display:inline-flex;align-items:baseline;gap:9px;padding:6px 14px;margin-bottom:6px;
   border:1px solid var(--line);border-radius:999px;background:var(--panel)}
 #endPos .ep-lab{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-dim);font-weight:700}
-#endPos .ep-val{font-size:30px;font-weight:900;font-style:italic;line-height:1;color:var(--purple-lt)}
+#endPos .ep-val{font-size:30px;font-weight:900;font-style:italic;line-height:1;color:var(--teal-lt)}
 #endPos .ep-of{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);font-weight:700}
-#endPos.podium{border-color:rgba(177,75,244,.6);background:rgba(177,75,244,.12)}
+#endPos.podium{border-color:rgba(17,155,149,.6);background:rgba(17,155,149,.12)}
 #endPos.win .ep-val{color:var(--green)}
 #endPos.dnf .ep-val{color:var(--red);font-size:24px}
 .empty{font-size:13px;color:var(--ink-dim);padding:6px 2px}
@@ -380,9 +390,9 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
 
   <!-- ============ START ============ -->
   <section id="start" class="screen active">
-    <div class="kick">Reliability Grand Prix</div>
+    <div class="kick">Reliability GP</div>
     <h1>PIT<em>WALL</em></h1>
-    <div class="sub2">You make the calls. The driver drives.</div>
+    <div class="sub2">You run the crew</div>
     <div class="cheq"></div>
     <div id="startSvgWrap"><svg id="startSvg" viewBox="40 50 240 340"></svg></div>
     <div class="bestline" id="startBest"></div>
@@ -407,15 +417,16 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
         <div id="popLayer"></div></div>
     </div>
     <div id="timebar"><i></i></div>
-    <div id="maintBar" class="on"><i style="width:100%"></i>
-      <span class="mt-lab">Up to date</span>
-      <span class="mt-note">wear slowed</span>
-      <span class="mt-cd">&mdash;</span>
-      <span id="riskChip">RISK <b>8%</b></span>
+    <div id="streak">
+      <div class="sk-lab">All green</div>
+      <div class="sk-bar"><i></i></div>
+      <div class="sk-mult">x1.0</div>
+      <div id="riskChip">RISK <b>8%</b></div>
     </div>
-    <div id="maintCoach">
-      <div class="mc-t">Keep an eye on this</div>
-      <div class="mc-s">blue means wear is slowed. it drains back to amber.</div>
+    <div id="maintBar"><i></i>
+      <span class="mt-lab">Out of date</span>
+      <span class="mt-note">wear at full speed</span>
+      <span class="mt-cd">&mdash;</span>
     </div>
     <div class="trackwrap">
       <svg id="raceSvg" viewBox="40 50 240 340"></svg>
@@ -467,12 +478,13 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
     <div class="brk" id="breakdown"></div>
     <div id="debrief"></div>
     <div class="lbwrap">
-      <h3>Session leaderboard</h3>
+      <h3>Leaderboard <span class="lbnote">saved on this device</span></h3>
       <div class="nameRow">
         <input id="nameIn" maxlength="12" placeholder="YOUR NAME" autocomplete="off" spellcheck="false">
         <button id="saveBtn">Save</button>
       </div>
       <div id="lbList"></div>
+      <button id="clearLB" class="lbclear">Clear this device</button>
     </div>
     <div id="endBottom">
       <button class="btn-primary" id="againBtn">Race Again</button>
@@ -484,7 +496,7 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
 <div id="tutCard">
   <div class="tc-kick">Before the race</div>
   <h2>TUTORIAL</h2>
-  <div class="tc-sub">Three guided presses to learn the crew panel. <b>Nothing is scored</b> and you cannot fail here.
+  <div class="tc-sub">Three guided presses to learn the crew panel. <b>Nothing is scored</b> and you cannot lose the car.
     The race starts straight after.</div>
   <div class="tc-btns">
     <button class="btn-primary" id="tutStartBtn">Start tutorial</button>
@@ -567,8 +579,8 @@ function carSprite(color,isMe){
   const g=document.createElementNS(SVGNS,'g');
   const add=(t,a)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);g.appendChild(e);return e;};
   if(isMe){
-    add('ellipse',{cx:0,cy:0,rx:17,ry:11,fill:'rgba(177,75,244,.34)'});
-    add('ellipse',{cx:0,cy:0,rx:13,ry:8.5,fill:'rgba(196,104,255,.30)',stroke:'#C468FF','stroke-width':.9});
+    add('ellipse',{cx:0,cy:0,rx:17,ry:11,fill:'rgba(17,155,149,.34)'});
+    add('ellipse',{cx:0,cy:0,rx:13,ry:8.5,fill:'rgba(25,207,198,.30)',stroke:'#19CFC6','stroke-width':.9});
   }
   [[-5.5,-4.6],[-5.5,4.6],[4.2,-4.2],[4.2,4.2]].forEach(w=>
     add('rect',{x:w[0]-1.9,y:w[1]-1.5,width:3.8,height:3,rx:1,fill:'#0F1218',stroke:'#3A4657','stroke-width':.5}));
@@ -590,13 +602,13 @@ function meMarker(){
   const g=document.createElementNS(SVGNS,'g');
   const add=(t,a,txt)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);
     if(txt!=null)e.textContent=txt;g.appendChild(e);return e;};
-  add('circle',{cx:0,cy:0,r:11,fill:'none',stroke:'#C468FF','stroke-width':1.6,class:'meHalo'});
+  add('circle',{cx:0,cy:0,r:11,fill:'none',stroke:'#19CFC6','stroke-width':1.6,class:'meHalo'});
   const lab=document.createElementNS(SVGNS,'g');
   lab.setAttribute('class','meArrow');
   const la=(t,a,txt)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);
     if(txt!=null)e.textContent=txt;lab.appendChild(e);return e;};
-  la('rect',{x:-11,y:-27,width:22,height:11,rx:3,fill:'#B14BF4',stroke:'#fff','stroke-width':.8});
-  la('path',{d:'M -3.4 -16.2 L 0 -12.4 L 3.4 -16.2 Z',fill:'#B14BF4',stroke:'#fff','stroke-width':.8,
+  la('rect',{x:-11,y:-27,width:22,height:11,rx:3,fill:'#119B95',stroke:'#fff','stroke-width':.8});
+  la('path',{d:'M -3.4 -16.2 L 0 -12.4 L 3.4 -16.2 Z',fill:'#119B95',stroke:'#fff','stroke-width':.8,
     'stroke-linejoin':'round'});
   la('text',{x:0,y:-18.9,'text-anchor':'middle','font-family':'Archivo, sans-serif','font-size':8,
     'font-weight':800,fill:'#fff','letter-spacing':.6},'YOU');
@@ -652,9 +664,64 @@ const NAMES=[
   {n:'NORRS', c:'#FF8000'},{n:'ALONS', c:'#229971'},{n:'ALBON', c:'#64C4FF'}
 ];
 
+/* ================= SAVED DATA =================
+   Everything here lives in THIS browser's localStorage. It survives a refresh,
+   closing the tab and closing the browser. It is not shared with any other
+   device: every phone keeps its own separate copy.
+
+   store.pid     a random ID generated once, the first time this browser loads
+                 the game. This is how a refresh is recognised as the same
+                 player rather than a new one.
+   store.name    the last name typed, so the box can be pre-filled.
+   store.best    the best score seen on this device.
+   store.entries the leaderboard rows. */
+const STORE_KEY='pitwall.v1';
+
+/* localStorage can throw instead of returning null when a browser is locked
+   down or storage is full, so every access is guarded. If it is unavailable
+   the game still plays perfectly, it just forgets between refreshes. */
+function storeRead(){
+  try{ const raw=localStorage.getItem(STORE_KEY); return raw?JSON.parse(raw):null; }
+  catch(e){ return null; }
+}
+function storeWrite(o){
+  try{ localStorage.setItem(STORE_KEY,JSON.stringify(o)); return true; }
+  catch(e){ return false; }
+}
+/* crypto.randomUUID only exists on https and localhost, so keep a fallback
+   for the case where this is served over plain http on a local network. */
+function newPid(){
+  try{ if(window.crypto&&crypto.randomUUID) return crypto.randomUUID(); }catch(e){}
+  return 'p-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,10);
+}
+
+let store=storeRead();
+if(!store||typeof store!=='object'||!store.pid){
+  store={pid:newPid(),name:'',best:0,entries:[]};
+  storeWrite(store);
+}
+/* A hand-edited or half-written record should not be able to break the game. */
+if(!Array.isArray(store.entries))store.entries=[];
+if(typeof store.best!=='number'||!isFinite(store.best))store.best=0;
+if(typeof store.name!=='string')store.name='';
+store.entries=store.entries.filter(e=>e&&typeof e.name==='string'&&typeof e.score==='number'&&isFinite(e.score));
+
+const PID=store.pid;
+/* One device can be shared, so a row is identified by this browser AND the
+   name typed. Same phone, same name means the same player and the score is
+   merged. A different name on the same phone starts a separate row. */
+const rowKey=n=>PID+'::'+n;
+const isMine=e=>String(e.id||'').indexOf(PID+'::')===0;
+
+function persist(){
+  store.best=sessionBest;
+  store.entries=leaderboard;
+  storeWrite(store);
+}
+
 /* ================= STATE ================= */
 let S=null, raceRAF=null, lastT=0;
-let sessionBest=0, leaderboard=[], lastSaved=null;
+let sessionBest=store.best, leaderboard=store.entries, lastSaved=null;
 let trackR=null, startR=null;
 let seenTyreStop=false;   // the "TYRES parks the car" note is a one-time thing
 
@@ -668,7 +735,7 @@ function freshState(){
     score:0, scoreShown:0,
     sys:{}, order:[],
     job:null, jobT:0, jobLen:0,
-    maintained:CFG.INSPECT_LEN, wasMaintained:true, pushing:0, surge:0, nextSurge:rand(4,6),
+    maintained:0, wasMaintained:false, pushing:0, surge:0, nextSurge:rand(4,6),
     nextFault:CFG.FAULT_EVERY,
     failures:0, repair:0,
     pace:1, wearMul:1, stopped:false, disp:0,
@@ -725,13 +792,26 @@ function award(n,why,silent){
 }
 function shake(){const r=$('race');r.classList.remove('shake');void r.offsetWidth;r.classList.add('shake');}
 function breakStreak(){
-  addPop(0,'bonus lost'); SFX.bad();
-  radio('<b>Gauge in the red.</b> Attack bonus back to x1.',true);
+  const el=$('streak');
+  el.classList.remove('brk'); void el.offsetWidth; el.classList.add('brk');
+  addPop(0,'streak lost'); SFX.bad();
+  radio('<b>Gauge in the red.</b> Streak gone, back to x1.',true);
 }
-/* The bonus has no bar of its own: the ATTACK button carries the number,
-   which is the only place it is ever spent. */
 function renderStreak(){
-  S.multShown=S.mult;
+  const el=$('streak'), f=el.querySelector('.sk-bar i'), m=el.querySelector('.sk-mult');
+  const pct=(S.mult-1)/(CFG.MULT_MAX-1)*100;
+  f.style.width=clamp(pct,0,100).toFixed(1)+'%';
+  const txt='x'+S.mult.toFixed(1);
+  if(m.textContent!==txt){ m.textContent=txt;
+    if(S.mult>S.multShown+0.24){ m.classList.remove('pop'); void m.offsetWidth; m.classList.add('pop'); S.multShown=S.mult; }
+    if(S.mult<S.multShown)S.multShown=S.mult;
+  }
+  const anyRed=S.order.some(s=>s.active&&s.v>=CFG.RED);
+  const anyAmber=S.order.some(s=>s.active&&s.v>=CFG.AMBER);
+  el.classList.toggle('cold',anyRed||anyAmber);
+  el.classList.toggle('hot',!anyRed&&!anyAmber&&S.mult>=2.5);
+  el.querySelector('.sk-lab').textContent=anyRed?'Streak lost':anyAmber?'Draining':'All green';
+  // make the link explicit: PUSH pays the multiplier
   $('bPush').querySelector('.sb').textContent='attack x'+S.mult.toFixed(1);
 }
 function renderMaint(){
@@ -884,11 +964,7 @@ function finishJob(k){
   if(k!=='patch'&&k!=='push')SFX.done();
   S.job=null; setPanel();
   if(k==='tyres')clearPit();   // car rejoins: put the track view back to normal
-  if(S.phase==='tutorial'){
-    S.tutStep++; S.tutTimer=0; setTutBadge(true,S.tutStep);
-    // step 2 just refreshed the strip: point at it while it is visibly blue
-    if(k==='inspect')showMaintCoach();
-  }
+  if(S.phase==='tutorial'){ S.tutStep++; S.tutTimer=0; setTutBadge(true,S.tutStep); }
 }
 
 /* ================= FAILURE ================= */
@@ -918,7 +994,12 @@ function startRace(skipTut){
   $('scoreVal').textContent='0'; $('posVal').innerHTML='P4'; $('lapVal').textContent='1';
   $('timebar').firstElementChild.style.width='0%';
   $('bTyres').querySelector('.sb').textContent='new tyres, full stop';
-  $('maintBar').classList.remove('lapse');
+  $('maintBar').classList.remove('on','lapse');
+  $('gauges').classList.remove('maintained');
+  $('bInspect').classList.remove('armed');
+  const sk=$('streak'); sk.classList.remove('hot','cold','brk');
+  sk.querySelector('.sk-bar i').style.width='0%';
+  sk.querySelector('.sk-mult').textContent='x1.0';
   radio('Tyres are going off already.');
   // build cars
   trackR.carsG.innerHTML='';
@@ -927,7 +1008,7 @@ function startRace(skipTut){
     return {name:r.n,g,dist:0,base:0.1250*(0.905-i*0.024),ph:rand(0,6.28)};
   });
   gridReset();
-  S.me=carSprite('#B14BF4',true); trackR.carsG.appendChild(S.me);
+  S.me=carSprite('#119B95',true); trackR.carsG.appendChild(S.me);
   S.meMark=meMarker(); trackR.carsG.appendChild(S.meMark);
   S.order.forEach(s=>{s.el.classList.remove('st-a','st-r','surging');s.el.classList.add('st-g');
     s.fill.style.height='100%'; s.val.textContent='100%';});
@@ -958,11 +1039,10 @@ function skipTutorial(){
   if(!S||S.phase!=='tutorial')return;
   S.skippedTut=true;
   $('coach').classList.remove('show');
-  hideMaintCoach();
   setTutBadge(false);
   // wipe the practice wear so the race starts on a clean car either way
   S.order.forEach(s=>{s.v=0;s.mul=1;});
-  S.job=null; S.jobT=0; S.maintained=CFG.INSPECT_LEN; S.pushing=0; S.surge=0;
+  S.job=null; S.jobT=0; S.maintained=0; S.pushing=0; S.surge=0;
   S.sys.temp.el.classList.remove('surging');
   $('pushFx').classList.remove('on');
   clearPit(); setPanel();
@@ -1004,9 +1084,7 @@ function step(dt){
   if(live)S.t+=dt;
 
   // timers
-  // the update buff only burns during the real race, so practice never
-  // leaves a new player starting out of date without knowing why
-  if(live&&S.maintained>0)S.maintained-=dt;
+  if(S.maintained>0)S.maintained-=dt;
   if(S.pushing>0){S.pushing-=dt;if(S.pushing<=0)$('pushFx').classList.remove('on');}
   if(S.repair>0){S.repair-=dt;if(S.repair<=0){S.repair=0;radio('Repair done. Back out, but that hurt.');setPanel();}}
 
@@ -1137,47 +1215,29 @@ function step(dt){
 /* ================= TUTORIAL ================= */
 const TUT=[
   {cap:'Tyres gone. Call a pit stop.', btn:'bTyres'},
-  {cap:'Updates ran out. Press UPDATES to renew them.', btn:'bInspect'},
+  {cap:'Run updates before it breaks.', btn:'bInspect'},
   {cap:'Gap ahead. Attack now.', btn:'bPush'}
 ];
 function tutorial(dt){
   S.tutTimer+=dt;
   if(S.tutStep>=3){
     S.tutReady=false;
-    if(S.tutTimer>0.35){ $('coach').classList.remove('show'); hideMaintCoach(); goLive(); }
+    if(S.tutTimer>0.35){ $('coach').classList.remove('show'); goLive(); }
     return;
   }
   const t=TUT[S.tutStep];
   if(S.tutStep===0)S.sys.tyre.v=Math.min(88,S.sys.tyre.v+34*dt);
-  if(S.tutStep===1){
-    S.sys.temp.v=Math.min(34,S.sys.temp.v+9*dt);
-    // run the cover down on purpose: the strip going amber is the lesson
-    if(S.maintained>0)S.maintained=Math.max(0,S.maintained-14*dt);
-  }
+  if(S.tutStep===1)S.sys.temp.v=Math.min(34,S.sys.temp.v+9*dt);
   if(!S.job){
     if(S.tutStep===0&&S.sys.tyre.v<62){ S.tutReady=false; setPanel(); $('coach').classList.remove('show'); return; }
     if(S.tutStep>0&&S.tutTimer<0.55){ S.tutReady=false; setPanel(); $('coach').classList.remove('show'); return; }
     if(!S.tutReady){ S.tutReady=true; setPanel(); }
     showCoach(t.cap,t.btn);
     if(S.tutStep===0)radio('Tyres are shot. We need a stop.');
-    if(S.tutStep===1)radio('The amber strip above the track means <b>your updates have run out</b>, so the car now wears at full speed. Nothing is broken yet. Press <b>UPDATES</b> anyway.');
+    if(S.tutStep===1)radio('Nothing is broken. Look anyway.');
     if(S.tutStep===2)radio('Car ahead is in range.');
   } else $('coach').classList.remove('show');
 }
-/* points up at the update strip right after it has been refreshed */
-let maintCoachTmr=null;
-function showMaintCoach(ms){
-  const c=$('maintCoach'), bar=$('maintBar'), sec=$('race');
-  c.classList.add('show');
-  const sr=sec.getBoundingClientRect(), br=bar.getBoundingClientRect();
-  let left=br.left-sr.left+br.width/2-c.offsetWidth/2;
-  left=clamp(left,4,sr.width-c.offsetWidth-4);
-  c.style.left=left+'px';
-  c.style.top=(br.bottom-sr.top+9)+'px';
-  clearTimeout(maintCoachTmr);
-  maintCoachTmr=setTimeout(hideMaintCoach,ms||4800);
-}
-function hideMaintCoach(){ clearTimeout(maintCoachTmr); $('maintCoach').classList.remove('show'); }
 function showCoach(text,btnId){
   const c=$('coach'), b=$(btnId), p=$('panel');
   c.textContent=text; c.classList.add('show');
@@ -1201,7 +1261,6 @@ function goLive(){
       setTimeout(()=>{
         L.classList.remove('active');
         S.phase='race'; S.t=0; S.nextSurge=rand(3,5); S.nextFault=CFG.FAULT_EVERY;
-        S.maintained=CFG.INSPECT_LEN; S.wasMaintained=true;   // race begins up to date
         gridReset();
         radio('Two minutes. Bring it home in one piece.');
         setPanel();
@@ -1269,13 +1328,13 @@ function endRace(dnf){
   S.phase='over'; $('pushFx').classList.remove('on');
   clearPit();
   $('coach').classList.remove('show');
-  hideMaintCoach();
   const st=S.stat;
   if(!dnf){ st.finish=CFG.SC.finishBase+(7-S.pos)*CFG.SC.finishPer; S.score+=st.finish; }
   const total=Math.max(0,Math.round(S.score));
   const prevBest=sessionBest;
   if(total>sessionBest)sessionBest=total;
   lastSaved={score:total};
+  persist();   // the best is kept even if the player never presses Save
 
   // finish position, stated plainly next to the score
   const ep=$('endPos');
@@ -1294,8 +1353,8 @@ function endRace(dnf){
 
   $('endScore').textContent=total;
   const eb=$('endBest');
-  if(prevBest===0){ eb.textContent='First run of the session.'; eb.classList.remove('win'); }
-  else if(total>prevBest){ eb.innerHTML='NEW SESSION BEST. Beat '+prevBest+' by <b>'+(total-prevBest)+'</b>.'; eb.classList.add('win'); }
+  if(prevBest===0){ eb.textContent='First run on this device.'; eb.classList.remove('win'); }
+  else if(total>prevBest){ eb.innerHTML='NEW BEST. Beat '+prevBest+' by <b>'+(total-prevBest)+'</b>.'; eb.classList.add('win'); }
   else { eb.innerHTML='You were <b>'+(prevBest-total)+'</b> short of your best ('+prevBest+').'; eb.classList.remove('win'); }
 
   const rows=[
@@ -1322,8 +1381,10 @@ function endRace(dnf){
   $('debrief').classList.remove('in');
   setTimeout(()=>$('debrief').classList.add('in'),160+(rows.length+1)*150);
 
-  $('nameIn').value=''; $('saveBtn').disabled=false; $('saveBtn').textContent='Save';
-  renderLB(-1);
+  // pre-fill with the last name used on this device, so a returning player
+  // does not have to type it again
+  $('nameIn').value=store.name; $('saveBtn').disabled=false; $('saveBtn').textContent='Save';
+  renderLB();
   show('end');
 }
 /* Remember the last two lines used so a repeat run does not read identically. */
@@ -1356,7 +1417,7 @@ function debrief(dnf,total){
     if(pat>insp)add(90,'f1-patch','The <b>'+st.failedSys+'</b> went. You restarted things '+pat+' times and ran updates '+insp+'. '+
       'A restart buys you seconds and sells you the next failure: each one leaves that system decaying faster than before.');
     add(88,'f1-close','One failure, and the forced repair cost far more than the planned fix would have: five seconds stopped, '+
-      'the attack bonus gone, and places lost. Starting that fix one gauge-step earlier turns a failure into routine maintenance.');
+      'the streak gone, and places lost. Starting that fix one gauge-step earlier turns a failure into routine maintenance.');
     if(cov<0.5)add(89,'f1-cov','Your updates covered about '+covPct+'% of the race, so for the rest of it everything wore at full speed. '+
       'That is where the <b>'+st.failedSys+'</b> failure came from: not one bad decision, just a long stretch with no cover.');
   }
@@ -1370,19 +1431,19 @@ function debrief(dnf,total){
       Math.round(CFG.INSPECT_MUL*100)+'% and fault risk at '+Math.round(CFG.FAULT_INSPECT_MUL*100)+'%.');
     if(st.lateFix>=3)add(66,'late','You caught everything, but mostly at the last moment. '+st.lateFix+' fixes came after the gauge was '+
       'already deep in the red, which scores a fraction of the same job done early. Same buttons, earlier presses.');
-    if(S.multBreaks>=3)add(64,'streak','You lost the attack bonus <b>'+S.multBreaks+' times</b>, so most of your pushing scored near x1. '+
-      'That bonus is worth more than any single fix: letting one gauge tip into the red costs more than the stop would have.');
+    if(S.multBreaks>=3)add(64,'streak','You broke the green streak <b>'+S.multBreaks+' times</b>, so most of your pushing scored near x1. '+
+      'The multiplier is worth more than any single fix: letting one gauge tip into the red costs more than the stop would have.');
     if(redSec>=15)add(60,'red','You spent about '+redSec+' seconds with something in the red. Nothing broke, but in the red the car is slow, '+
-      'the attack bonus is dead and a random fault can finish the job. Amber is the moment to act, not red.');
+      'the streak is dead and a random fault can finish the job. Amber is the moment to act, not red.');
     if(st.pushes<=1)add(56,'nopush','Beautifully maintained: '+grnSec+'s fully green and the multiplier reached <b>x'+peak+'</b>. '+
-      'Then you never spent it. <b>ATTACK</b> is the only button that cashes that bonus in, and a well maintained car is exactly the one '+
+      'Then you never spent it. <b>PUSH</b> is the only button that cashes the streak in, and a well maintained car is exactly the one '+
       'you can afford to push.');
     if(st.pushes>=5&&S.multPeak<2.2)add(52,'hotpush','You pushed '+st.pushes+' times but the multiplier never got past x'+peak+
       ', so you were attacking on a tired car. Pushing doubles wear. It pays when the board is green and costs you when it is not.');
     if(st.tyreStops===0)add(48,'nostop','A whole race without a single <b>PIT STOP</b>. Impressive discipline elsewhere, but the tyre gauge '+
       'was carrying the cost the whole way, and once brakes arrived the stop would have fixed both in one go.');
     if(st.cools<=1)add(46,'nocool','Only '+st.cools+' cool'+(st.cools===1?'':'s')+' all race. <b>COOL</b> is the cheapest job on the panel at '+
-      CFG.JOB.cool.toFixed(1)+'s and the engine surges are not optional. Using it early keeps the attack bonus alive for almost nothing.');
+      CFG.JOB.cool.toFixed(1)+'s and the engine surges are not optional. Using it early keeps the streak alive for almost nothing.');
 
     /* ---- genuinely strong runs: several ways to say it ---- */
     if(cov>=0.7&&grn>=0.7&&S.multBreaks===0){
@@ -1433,13 +1494,13 @@ function debrief(dnf,total){
     'what is actually out there. <b>This is the risk our team exists to close: by maintaining, modernising and '+
     'migrating ageing systems, we keep you protected from avoidable security risks and system failures.</b>';
 }
-function renderLB(hi){
+function renderLB(){
   const l=$('lbList');
   if(!leaderboard.length){ l.innerHTML='<div class="empty">No entries yet. Put your name in.</div>'; return; }
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const sorted=leaderboard.slice().sort((a,b)=>b.score-a.score);
   l.innerHTML=sorted.map((e,i)=>
-    '<div class="lbrow'+(e.id===hi?' me':'')+'"><span class="r">'+(i+1)+'</span><span class="n">'+esc(e.name)+'</span><span class="s">'+e.score+'</span></div>'
+    '<div class="lbrow'+(isMine(e)?' me':'')+'"><span class="r">'+(i+1)+'</span><span class="n">'+esc(e.name)+'</span><span class="s">'+e.score+'</span></div>'
   ).join('');
 }
 
@@ -1447,7 +1508,7 @@ function renderLB(hi){
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   $(id).classList.add('active');
-  if(id==='start'){ $('startBest').innerHTML = sessionBest? 'Session best <b>'+sessionBest+'</b>' : 'One race. Two minutes. Keep it alive.'; }
+  if(id==='start'){ $('startBest').innerHTML = sessionBest? 'Best so far <b>'+sessionBest+'</b>' : 'One race. Two minutes. Keep it alive.'; }
   if(id==='end')$('end').scrollTop=0;
 }
 /* skipTut=true goes straight to lights out. undefined means "ask first". */
@@ -1468,7 +1529,7 @@ window.addEventListener('load',()=>{
   // attract cars on the start screen
   const attract=[];
   NAMES.slice(0,4).forEach((r,i)=>{const g=carSprite(r.c,false);startR.carsG.appendChild(g);attract.push({g,d:i*0.05,v:0.045+i*0.004});});
-  const meG=carSprite('#B14BF4',true); startR.carsG.appendChild(meG); attract.push({g:meG,d:0.22,v:0.052,me:true});
+  const meG=carSprite('#119B95',true); startR.carsG.appendChild(meG); attract.push({g:meG,d:0.22,v:0.052,me:true});
   const startMark=meMarker(); startR.carsG.appendChild(startMark);
   let at=performance.now();
   (function spin(now){ const dt=Math.min(0.05,(now-at)/1000); at=now;
@@ -1495,14 +1556,41 @@ window.addEventListener('load',()=>{
   $('againBtn').addEventListener('click',()=>beginRun(true));
   $('againTutBtn').addEventListener('click',()=>beginRun(false));
   $('saveBtn').addEventListener('click',()=>{
-    const n=($('nameIn').value||'DRIVER').trim().toUpperCase().slice(0,12);
-    const id=Date.now();
-    leaderboard.push({name:n,score:lastSaved.score,id});
-    renderLB(id);
-    $('saveBtn').disabled=true; $('saveBtn').textContent='Saved';
+    if(!lastSaved)return;
+    const n=(($('nameIn').value||'').trim()||'DRIVER').toUpperCase().slice(0,12);
+    store.name=n;
+
+    const key=rowKey(n);
+    const row=leaderboard.find(e=>e.id===key);
+    let improved=true;
+    if(!row){
+      leaderboard.push({id:key,name:n,score:lastSaved.score});
+    } else if(lastSaved.score>row.score){
+      row.score=lastSaved.score;          // only ever moves upward
+    } else {
+      improved=false;                     // a lower score never overwrites a higher one
+    }
+
+    persist();
+    renderLB();
+    $('saveBtn').disabled=true;
+    $('saveBtn').textContent=improved?'Saved':'Best kept';
     SFX.done();
   });
   $('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('saveBtn').click();});
+
+  // wipes the saved data on this device only. Handy between events, and for
+  // testing. Remove this button if you would rather players could not do it.
+  $('clearLB').addEventListener('click',()=>{
+    if(!confirm('Clear the leaderboard and best score saved on this device?'))return;
+    leaderboard.length=0; sessionBest=0; store.name='';
+    persist();
+    renderLB();
+    $('nameIn').value=''; $('saveBtn').disabled=false; $('saveBtn').textContent='Save';
+  });
+
+  // paint whatever was already saved, so a refresh shows the board straight away
+  renderLB();
 
   // keyboard for the projector laptop
   window.addEventListener('keydown',e=>{
