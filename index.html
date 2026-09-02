@@ -372,7 +372,11 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
   font-family:inherit;font-weight:900;font-style:italic;font-size:17px;padding:11px 12px;letter-spacing:.06em;text-transform:uppercase;outline:none}
 #nameIn:focus{border-color:var(--teal)}
 #saveBtn{padding:0 18px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;background:var(--panel-3)}
-#lbList{display:flex;flex-direction:column;gap:4px;max-height:150px;overflow-y:auto}
+#lbList{display:flex;flex-direction:column;gap:4px;max-height:320px;overflow-y:auto}
+.lbgap{display:flex;align-items:center;gap:9px;padding:2px 2px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim)}
+.lbgap:before,.lbgap:after{content:'';flex:1;border-top:1px dashed var(--line)}
 .lbrow{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:15px}
 .lbrow .r{font-family:'JetBrains Mono',monospace;color:var(--ink-dim);font-weight:700;width:22px}
 .lbrow .n{flex:1;font-weight:900;font-style:italic;letter-spacing:.04em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -506,7 +510,7 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
         <span class="postState" id="postState"></span>
       </div>
       <div id="lbList"></div>
-      <button id="clearLB" class="lbclear">Clear this device</button>
+      <button id="clearLB" class="lbclear">Reset this device</button>
     </div>
     <div id="endBottom">
       <button class="btn-primary" id="againBtn">Race Again</button>
@@ -765,6 +769,7 @@ const CLOUD_ON  = SUPABASE_URL.indexOf('YOUR-PROJECT-REF') < 0 && SUPABASE_KEY.i
 const REST      = SUPABASE_URL.replace(/\/+$/,'') + '/rest/v1/scores';
 const SB_HEAD   = { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY };
 
+const TOP_N   = 5;                              // places shown before your own line
 let globalRows = [];                            // best row per player, sorted
 let cloudErr   = '';                            // last failure, shown on the board
 let cloudState = CLOUD_ON ? 'idle' : 'off';     // off | loading | live | error
@@ -778,7 +783,7 @@ async function cloudLoad(){
   if(!CLOUD_ON) return;
   cloudState = 'loading'; cloudErr = ''; renderLB();
   try{
-    const r = await fetch(REST + '?select=player_id,name,score&order=score.desc&limit=400', { headers: SB_HEAD });
+    const r = await fetch(REST + '?select=player_id,name,score&order=score.desc&limit=1000', { headers: SB_HEAD });
     if(!r.ok){
       // Supabase explains itself in the body, so read it rather than guess
       const detail = await r.text().catch(()=>'');
@@ -794,7 +799,7 @@ async function cloudLoad(){
       const prev = best.get(k);
       if(!prev || row.score > prev.score) best.set(k, row);
     });
-    globalRows = Array.from(best.values()).sort((a,b)=>b.score-a.score).slice(0,50);
+    globalRows = Array.from(best.values()).sort((a,b)=>b.score-a.score);   // whole field, so a rank can be worked out
     cloudState = 'live';
   }catch(e){
     cloudState = 'error';   // no connection, or the table/policies are not set up
@@ -1656,7 +1661,7 @@ function renderLB(){
     rows = globalRows;
     mine = e => e.player_id === PID;         // rows posted from this browser
     if(note) note.textContent = cloudState==='loading' ? 'loading'
-                              : cloudState==='live'    ? 'everyone, live'
+                              : cloudState==='live'    ? (globalRows.length===1 ? '1 racing' : globalRows.length+' racing')
                               : cloudState==='error'   ? 'offline'
                               : cloudState==='off'     ? 'not connected yet'
                               : 'everyone';
@@ -1673,9 +1678,24 @@ function renderLB(){
   }
 
   if(!rows.length){ l.innerHTML='<div class="empty">'+empty+'</div>'; return; }
-  l.innerHTML=rows.map((e,i)=>
-    '<div class="lbrow'+(mine(e)?' me':'')+'"><span class="r">'+(i+1)+'</span><span class="n">'+esc(e.name)+'</span><span class="s">'+e.score+'</span></div>'
-  ).join('');
+
+  const row=(e,rank)=>'<div class="lbrow'+(mine(e)?' me':'')+'"><span class="r">'+rank+
+    '</span><span class="n">'+esc(e.name)+'</span><span class="s">'+e.score+'</span></div>';
+
+  /* The on-device board is short by nature, so it just lists everything. */
+  if(lbView!=='global'){ l.innerHTML=rows.map((e,i)=>row(e,i+1)).join(''); return; }
+
+  /* The shared board could be a hundred people, and a projector only wants the
+     sharp end. So: the top five, then your own line wherever you actually are.
+     Nobody scrolls to find themselves and nobody drops off the bottom. */
+  let html = rows.slice(0,TOP_N).map((e,i)=>row(e,i+1)).join('');
+  const myIdx = rows.findIndex(mine);
+  if(myIdx >= TOP_N){
+    const skipped = myIdx - TOP_N;
+    html += '<div class="lbgap">'+(skipped>0 ? skipped+(skipped===1?' other':' others') : '')+'</div>';
+    html += row(rows[myIdx], myIdx+1);
+  }
+  l.innerHTML = html;
 }
 
 /* ================= NAV ================= */
@@ -1753,12 +1773,11 @@ window.addEventListener('load',()=>{
   // wipes the saved data on this device only. Handy between events, and for
   // testing. Remove this button if you would rather players could not do it.
   $('clearLB').addEventListener('click',()=>{
-    if(!confirm('Clear the leaderboard and best score saved on this device?'))return;
+    if(!confirm('Forget the name, the best score and the This device board on this phone?\n\nThe shared Everyone board is not touched. Scores already posted stay on it.'))return;
     leaderboard.length=0; sessionBest=0; store.name='';
     persist();
     refreshNameUI(); setPostState('');
-    lbView='local';
-    renderLB();
+    renderLB();   // stay on whichever tab is open, so a wipe cannot look like the shared board vanished
     $('nameIn').value=''; $('saveBtn').disabled=false; $('saveBtn').textContent='Save';
   });
 
