@@ -1689,7 +1689,11 @@ function renderLB(){
      sharp end. So: the top five, then your own line wherever you actually are.
      Nobody scrolls to find themselves and nobody drops off the bottom. */
   let html = rows.slice(0,TOP_N).map((e,i)=>row(e,i+1)).join('');
-  const myIdx = rows.findIndex(mine);
+  /* "You" is this device AND the name currently in use. One phone can carry
+     several names (a shared handset, or testing solo), and matching on the
+     device alone would find your best row rather than the one you just set. */
+  let myIdx = rows.findIndex(e => mine(e) && e.name === store.name);
+  if(myIdx < 0) myIdx = rows.findIndex(mine);   // no row under this name yet
   if(myIdx >= TOP_N){
     const skipped = myIdx - TOP_N;
     html += '<div class="lbgap">'+(skipped>0 ? skipped+(skipped===1?' other':' others') : '')+'</div>';
