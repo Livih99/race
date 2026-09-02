@@ -356,6 +356,17 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
 .lbwrap h3 .lbnote{letter-spacing:.12em;color:var(--line);margin-left:6px}
 .lbclear{background:none;border:0;color:var(--ink-dim);font-size:10px;letter-spacing:.16em;
   text-transform:uppercase;font-weight:700;padding:9px 2px 2px;margin-top:2px;opacity:.7}
+.empty .why{display:block;margin-top:7px;font-family:'JetBrains Mono',monospace;
+  font-size:11px;line-height:1.5;color:var(--amber);word-break:break-word}
+.lbtabs{display:flex;gap:6px;margin-bottom:9px}
+.lbtab{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:9px;color:var(--ink-dim);
+  font-family:inherit;font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:8px 6px}
+.lbtab.active{border-color:var(--teal);color:var(--teal-lt);background:rgba(17,155,149,.1)}
+.whoRow{display:flex;align-items:center;gap:7px;margin-bottom:9px;font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);font-weight:700}
+.whoRow b{color:var(--teal-lt);font-style:italic;font-size:15px;letter-spacing:.04em;text-transform:none}
+.whoRow .lbclear{margin:0;padding:2px 0 2px 2px}
+.whoRow .postState{margin-left:auto;opacity:.75;letter-spacing:.1em}
 .nameRow{display:flex;gap:8px;margin-bottom:9px}
 #nameIn{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--ink);
   font-family:inherit;font-weight:900;font-style:italic;font-size:17px;padding:11px 12px;letter-spacing:.06em;text-transform:uppercase;outline:none}
@@ -478,10 +489,21 @@ button{font-family:inherit;color:var(--ink);background:var(--panel-2);border:1px
     <div class="brk" id="breakdown"></div>
     <div id="debrief"></div>
     <div class="lbwrap">
-      <h3>Leaderboard <span class="lbnote">saved on this device</span></h3>
-      <div class="nameRow">
+      <h3>Leaderboard <span class="lbnote" id="lbNote">everyone</span></h3>
+      <div class="lbtabs">
+        <button class="lbtab active" id="tabGlobal">Everyone</button>
+        <button class="lbtab" id="tabLocal">This device</button>
+      </div>
+      <!-- shown only until a name has been chosen. After that the name is
+           remembered and every run posts itself. -->
+      <div class="nameRow" id="nameRow">
         <input id="nameIn" maxlength="12" placeholder="YOUR NAME" autocomplete="off" spellcheck="false">
         <button id="saveBtn">Save</button>
+      </div>
+      <div class="whoRow" id="whoRow" hidden>
+        <span>Racing as</span><b id="whoName"></b>
+        <button id="changeName" class="lbclear">change</button>
+        <span class="postState" id="postState"></span>
       </div>
       <div id="lbList"></div>
       <button id="clearLB" class="lbclear">Clear this device</button>
@@ -717,6 +739,129 @@ function persist(){
   store.best=sessionBest;
   store.entries=leaderboard;
   storeWrite(store);
+}
+
+
+/* ================= GLOBAL LEADERBOARD =================
+   Everything above this point still works with no internet. This block adds a
+   shared board on top of it, using Supabase, which is a hosted Postgres
+   database that also exposes every table as a REST API. No library is needed:
+   a plain fetch() to that API is the whole client.
+
+   PUT YOUR TWO VALUES HERE. Both come from your Supabase dashboard:
+     Project Settings > Data API   -> Project URL
+     Project Settings > API Keys   -> Publishable key (starts sb_publishable_)
+
+   The publishable key is designed to be public and it is fine that anyone can
+   read it out of this file. It grants only what the Row Level Security
+   policies on the table allow, which is: read every score, add one new score.
+   It cannot edit or delete anything. Never put a secret or service_role key
+   in here, that one bypasses every policy. */
+const SUPABASE_URL = 'https://pqtyeexubdcpfqeforqj.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_moSZ1PZ74GuksoISU4EyrQ_baO39QP8';
+
+/* Until both are filled in the game just runs the old on-device board. */
+const CLOUD_ON  = SUPABASE_URL.indexOf('YOUR-PROJECT-REF') < 0 && SUPABASE_KEY.indexOf('YOUR_KEY_HERE') < 0;
+const REST      = SUPABASE_URL.replace(/\/+$/,'') + '/rest/v1/scores';
+const SB_HEAD   = { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY };
+
+let globalRows = [];                            // best row per player, sorted
+let cloudErr   = '';                            // last failure, shown on the board
+let cloudState = CLOUD_ON ? 'idle' : 'off';     // off | loading | live | error
+let lbView     = CLOUD_ON ? 'global' : 'local'; // which tab is showing
+
+/* READ. PostgREST builds the SQL from the query string:
+     select= the columns wanted   order= the sort   limit= the cap
+   It is an ordinary GET, so you can paste the same URL into a browser tab to
+   see the raw JSON, which is the quickest way to check the table is live. */
+async function cloudLoad(){
+  if(!CLOUD_ON) return;
+  cloudState = 'loading'; cloudErr = ''; renderLB();
+  try{
+    const r = await fetch(REST + '?select=player_id,name,score&order=score.desc&limit=400', { headers: SB_HEAD });
+    if(!r.ok){
+      // Supabase explains itself in the body, so read it rather than guess
+      const detail = await r.text().catch(()=>'');
+      throw new Error('HTTP ' + r.status + ' ' + detail.slice(0,200));
+    }
+    const rows = await r.json();
+    /* The table keeps every run ever played, which is the safest shape: rows
+       are only ever added, never changed. So the board is folded down to one
+       row per player here, keeping their best. */
+    const best = new Map();
+    rows.forEach(row=>{
+      const k = row.player_id + '::' + row.name;
+      const prev = best.get(k);
+      if(!prev || row.score > prev.score) best.set(k, row);
+    });
+    globalRows = Array.from(best.values()).sort((a,b)=>b.score-a.score).slice(0,50);
+    cloudState = 'live';
+  }catch(e){
+    cloudState = 'error';   // no connection, or the table/policies are not set up
+    cloudErr = e && e.message ? e.message : String(e);
+    console.error('[leaderboard] read failed:', e);
+  }
+  renderLB();
+}
+
+/* WRITE. One POST per finished race. Prefer: return=minimal tells the API not
+   to send the new row back, which keeps the response tiny. */
+async function cloudSubmit(name, score){
+  if(!CLOUD_ON) return false;
+  try{
+    const r = await fetch(REST, {
+      method : 'POST',
+      headers: Object.assign({ 'Content-Type':'application/json', Prefer:'return=minimal' }, SB_HEAD),
+      body   : JSON.stringify({ player_id: PID, name: name, score: score })
+    });
+    if(!r.ok){
+      const detail = await r.text().catch(()=>'');
+      cloudErr = 'HTTP ' + r.status + ' ' + detail.slice(0,200);
+      console.error('[leaderboard] write failed:', cloudErr);
+    }
+    return r.ok;   // rate-limit rejections from the trigger land here as false
+  }catch(e){
+    cloudErr = e && e.message ? e.message : String(e);
+    console.error('[leaderboard] write failed:', e);
+    return false;
+  }
+}
+
+/* The name is asked for once, then remembered, so a returning player just
+   watches their score climb without typing anything again. */
+function refreshNameUI(){
+  const has = !!store.name;
+  const nr = $('nameRow'), wr = $('whoRow');
+  if(nr) nr.hidden = has;
+  if(wr) wr.hidden = !has;
+  if(has && $('whoName')) $('whoName').textContent = store.name;
+}
+function setPostState(txt){ const e=$('postState'); if(e) e.textContent = txt || ''; }
+
+/* Puts one finished run on the on-device board and, if configured, the shared
+   one. Safe to call twice, the guard below stops a double post. */
+let posting = false;
+async function submitScore(n){
+  if(!lastSaved || posting) return;
+  n = (String(n||'').trim().toUpperCase().slice(0,12)) || 'DRIVER';
+  store.name = n;
+
+  // on-device board, unchanged rules: one row per name, and it only moves up
+  const key = rowKey(n);
+  const row = leaderboard.find(e=>e.id===key);
+  if(!row) leaderboard.push({id:key,name:n,score:lastSaved.score});
+  else if(lastSaved.score>row.score) row.score = lastSaved.score;
+  persist();
+
+  refreshNameUI();
+  renderLB();
+
+  if(!CLOUD_ON){ setPostState('on this device'); return; }
+  posting = true; setPostState('sending...');
+  const ok = await cloudSubmit(n, lastSaved.score);
+  posting = false;
+  if(ok){ setPostState('posted'); await cloudLoad(); }
+  else  { setPostState('not sent'); cloudState='error'; renderLB(); }
 }
 
 /* ================= STATE ================= */
@@ -1384,8 +1529,14 @@ function endRace(dnf){
   // pre-fill with the last name used on this device, so a returning player
   // does not have to type it again
   $('nameIn').value=store.name; $('saveBtn').disabled=false; $('saveBtn').textContent='Save';
+  refreshNameUI();
+  setPostState('');
   renderLB();
   show('end');
+  /* Name already chosen, so the run posts itself. First-time players see the
+     name box instead and press Save once, which is the last time they type. */
+  if(store.name) submitScore(store.name);
+  else if(CLOUD_ON) cloudLoad();
 }
 /* Remember the last two lines used so a repeat run does not read identically. */
 let debriefSeen=[];
@@ -1495,12 +1646,35 @@ function debrief(dnf,total){
     'migrating ageing systems, we keep you protected from avoidable security risks and system failures.</b>';
 }
 function renderLB(){
-  const l=$('lbList');
-  if(!leaderboard.length){ l.innerHTML='<div class="empty">No entries yet. Put your name in.</div>'; return; }
+  const l=$('lbList'), note=$('lbNote');
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const sorted=leaderboard.slice().sort((a,b)=>b.score-a.score);
-  l.innerHTML=sorted.map((e,i)=>
-    '<div class="lbrow'+(isMine(e)?' me':'')+'"><span class="r">'+(i+1)+'</span><span class="n">'+esc(e.name)+'</span><span class="s">'+e.score+'</span></div>'
+  if($('tabGlobal')) $('tabGlobal').classList.toggle('active', lbView==='global');
+  if($('tabLocal'))  $('tabLocal').classList.toggle('active', lbView==='local');
+
+  let rows, mine, empty;
+  if(lbView==='global'){
+    rows = globalRows;
+    mine = e => e.player_id === PID;         // rows posted from this browser
+    if(note) note.textContent = cloudState==='loading' ? 'loading'
+                              : cloudState==='live'    ? 'everyone, live'
+                              : cloudState==='error'   ? 'offline'
+                              : cloudState==='off'     ? 'not connected yet'
+                              : 'everyone';
+    empty = cloudState==='loading' ? 'Loading scores...'
+          : cloudState==='error'   ? 'Cannot reach the leaderboard right now. Your score is safe on this device.'
+            + (cloudErr ? '<span class="why">'+esc(cloudErr)+'</span>' : '')
+          : cloudState==='off'     ? 'Add your Supabase URL and key in the script to switch this on.'
+          : 'No scores yet. Be the first.';
+  } else {
+    rows = leaderboard.slice().sort((a,b)=>b.score-a.score);
+    mine = isMine;
+    if(note) note.textContent = 'saved on this device';
+    empty = 'No entries yet. Put your name in.';
+  }
+
+  if(!rows.length){ l.innerHTML='<div class="empty">'+empty+'</div>'; return; }
+  l.innerHTML=rows.map((e,i)=>
+    '<div class="lbrow'+(mine(e)?' me':'')+'"><span class="r">'+(i+1)+'</span><span class="n">'+esc(e.name)+'</span><span class="s">'+e.score+'</span></div>'
   ).join('');
 }
 
@@ -1557,26 +1731,23 @@ window.addEventListener('load',()=>{
   $('againTutBtn').addEventListener('click',()=>beginRun(false));
   $('saveBtn').addEventListener('click',()=>{
     if(!lastSaved)return;
-    const n=(($('nameIn').value||'').trim()||'DRIVER').toUpperCase().slice(0,12);
-    store.name=n;
-
-    const key=rowKey(n);
-    const row=leaderboard.find(e=>e.id===key);
-    let improved=true;
-    if(!row){
-      leaderboard.push({id:key,name:n,score:lastSaved.score});
-    } else if(lastSaved.score>row.score){
-      row.score=lastSaved.score;          // only ever moves upward
-    } else {
-      improved=false;                     // a lower score never overwrites a higher one
-    }
-
-    persist();
-    renderLB();
-    $('saveBtn').disabled=true;
-    $('saveBtn').textContent=improved?'Saved':'Best kept';
-    SFX.done();
+    $('saveBtn').disabled=true; $('saveBtn').textContent='Saving';
+    submitScore($('nameIn').value).then(()=>{
+      $('saveBtn').textContent='Saved';
+      SFX.done();
+    });
   });
+  // lets someone hand the phone over without wiping the whole device
+  $('changeName').addEventListener('click',()=>{
+    store.name=''; persist(); refreshNameUI(); setPostState('');
+    $('nameIn').value=''; $('saveBtn').disabled=false; $('saveBtn').textContent='Save';
+    $('nameIn').focus();
+  });
+  $('tabGlobal').addEventListener('click',()=>{
+    lbView='global'; renderLB();
+    if(CLOUD_ON && cloudState!=='live' && cloudState!=='loading') cloudLoad();
+  });
+  $('tabLocal').addEventListener('click',()=>{ lbView='local'; renderLB(); });
   $('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('saveBtn').click();});
 
   // wipes the saved data on this device only. Handy between events, and for
@@ -1585,12 +1756,17 @@ window.addEventListener('load',()=>{
     if(!confirm('Clear the leaderboard and best score saved on this device?'))return;
     leaderboard.length=0; sessionBest=0; store.name='';
     persist();
+    refreshNameUI(); setPostState('');
+    lbView='local';
     renderLB();
     $('nameIn').value=''; $('saveBtn').disabled=false; $('saveBtn').textContent='Save';
   });
 
   // paint whatever was already saved, so a refresh shows the board straight away
+  refreshNameUI();
   renderLB();
+  // and pull the shared board in the background, so it is warm by the finish
+  if(CLOUD_ON) cloudLoad();
 
   // keyboard for the projector laptop
   window.addEventListener('keydown',e=>{
